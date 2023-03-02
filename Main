@@ -1,0 +1,132 @@
+
+//if (world[i][j+1]==color(green) || world[i][j-1]==color(green) || world[i+1][j]==color(green) || world[i-1][j]==color(green) || world[i+1][j+1]==color(green) || world[i-1][j-1]==color(green) || world[i+1][j-1]==color(green) || world[i-1][j+1]==color(green)) {
+
+//make this into a calable function to create multiple islands
+  
+void setup() {
+  size(850, 850);
+  noStroke();
+  color green=color(0, 204, 102);
+  color blue=color(0, 92, 230);
+  color yellow=color(255, 212, 128);
+  color gray=color(128, 128, 128);
+  color lessGreen=color(0, 102, 0);
+  color white=color(255, 255, 255);
+  int GoodLuck=350; //island size
+  int world[][];
+  world=new int[850][850];
+  //setting everything to blue
+  for (int i=0; i<world.length; i++) {
+    for (int j=0; j<world.length; j++) {
+      world[i][j]=blue;
+    }
+  }
+  //finding center
+  int r=10;
+  int centerSquare=((width/r)/2)*10;
+  println(centerSquare);
+  world[centerSquare][centerSquare]=color(green);
+
+  //creating more island
+  for (int i=1; i<world.length-1; i++) {
+    for (int j=1; j<world.length-1; j++) {
+      int BadLuck=int(dist(i, j, centerSquare, centerSquare)*4);
+      int check=int(random(1, BadLuck));
+      if (check>=GoodLuck ) {
+      } else {
+        world[i][j]=color(green);
+      }
+    }
+  }
+  for (int l=0; l<8; l=l+1) {
+    for (int i=1; i<world.length-1; i=i+1) {
+      for (int j=1; j<world.length-1; j=j+1) {
+        if (neighbourCheck(world, i, j, blue)>4) {
+          world[i][j]=blue;
+        }
+      }
+    }
+  }
+  for (int i=1; i<world.length-1; i=i+1) {
+    for (int j=1; j<world.length-1; j=j+1) {
+      if (neighbourCheck(world, i, j, blue)>0 && world[i][j]!=blue) {
+        world[i][j]=yellow;
+      }
+    }
+  }
+  for (int i=1; i<world.length-1; i=i+1) {
+    for (int j=1; j<world.length-1; j=j+1) {
+      if (neighbourCheck(world, i, j, green)==8 ) {
+        world[i][j]=gray;
+      }
+    }
+  }
+  for (int i=1; i<world.length-1; i=i+1) {
+    for (int j=1; j<world.length-1; j=j+1) {
+      if (neighbourCheck(world, i, j, green)>3 && world[i][j]!=gray) {
+        world[i][j]=lessGreen;
+      }
+    }
+  }
+  for (int i=1; i<world.length-1; i=i+1) {
+    for (int j=1; j<world.length-1; j=j+1) {
+      if (neighbourCheck(world, i, j, lessGreen)>5) {
+        world[i][j]=blue;
+      }
+    }
+  }
+  for (int i=1; i<world.length-1; i=i+1) {
+    for (int j=1; j<world.length-1; j=j+1) {
+      if (neighbourCheck(world, i, j, blue)>5) {
+        world[i][j]=blue;
+      }
+    }
+  }
+  //drawing grid
+  for (int i=0; i<world.length; i=i+r) {
+    for (int j=0; j<world.length; j=j+r) {
+      fill(world[i][j]);
+      rect(i, j, r, r);
+    }
+  }
+
+  // creates an array of grounf cordinates
+  //int[] landPoints;
+  //landPoints=new int[0];
+  //landPoints = (int[])append(landPoints, centerSquare);
+  //landPoints = (int[])append(landPoints, centerSquare);
+  //for (int i=0; i<world.length; i=i+r) {
+  //  for (int j=0; j<world.length; j=j+r) {
+  //    if (world[i][j]==yellow || world[i][j]==green || world[i][j]==lessGreen) {
+  //      fill(yellow);
+  //      landPoints = (int[])append(landPoints, i);
+  //      landPoints = (int[])append(landPoints, i);
+  //    }
+  //  }
+  //}
+  //for (int l=1; l<landPoints.length-1; l=l+2) {
+  //  for (int k=1; k<landPoints.length-1; k=k+2) {
+  //    line(landPoints[l], landPoints[l+1], landPoints[k], landPoints[1+k]);
+  //  }
+  //}
+}
+
+
+public int neighbourCheck(int[][] world, int x, int y, color match) {
+  int count = 0;
+  if (x != 0 && x != width-1 && y != 0 && y != height-1) {
+    if (world[x-1][y-1] == match) count=count+1;
+    if (world[x][y-1] == match) count=count+1;
+    if (world[x-1][y] == match) count=count+1;
+    if (world[x+1][y+1] == match) count=count+1;
+    if (world[x][y+1] == match)count=count+1;
+    if (world[x+1][y] == match)count=count+1;
+    if (world[x+1][y-1] == match)count=count+1;
+    if (world[x-1][y+1] == match)count=count+1;
+  }
+  return count;
+}
+
+
+void draw() {
+}
